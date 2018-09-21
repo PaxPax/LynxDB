@@ -1,1 +1,1 @@
-LynxDB was created with non-realtional databases in mind and to become famailiar with the nim language. This database is for learning purposes only.
+LynxDB was created with non-relational databases in mind and to become familiar with the nim language. This database is for learning purposes only.
