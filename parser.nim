@@ -1,8 +1,7 @@
 import json, strutils
 let command_list = ["add", "add_pair", "del", "resize", "get"]
 
-#TODO this parser is brutal when it comes to validaing and generating
-#be weary all who try to use it
+
 proc parseCommand(x: seq[string]): JsonNode
 
 proc genJson*(to_parse: string): JsonNode=
