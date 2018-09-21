@@ -22,6 +22,8 @@ proc printTree(x: DoublyLinkedNodeObj): void
 
 var save_string = newJArray()
 
+proc newNode(target: Entity): DoublyLinkedNodeObj =
+    return DoublyLinkedNodeObj(next: nil, prev: nil, data: target)
 
 proc delEntity*(self: DoublyLinkedNodeObj, target: string): DoublyLinkedNodeObj =
     if self.isNil:
@@ -205,6 +207,3 @@ proc writeOrderedTree(): void =
         writeFile("./src/storage/lynx.json", $save_string)
     except IOError:
         echo("Error trying to save to file")
-
-
-#[TODO: load Tree]#
