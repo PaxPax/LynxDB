@@ -14,7 +14,6 @@ type
         saved: bool
 
 #[Prototypes]#
-# proc newEntity*(name: string, max_size: int): DoublyLinkedNodeObj
 proc newEntity*(self: DoublyLinkedNodeObj,name: string, max_size: int): void
 proc minEntity*(self: DoublyLinkedNodeObj): DoublyLinkedNodeObj
 proc swapRoot(root: DoublyLinkedNodeObj): DoublyLinkedNodeObj
@@ -99,7 +98,6 @@ proc newEntity*(self: DoublyLinkedNodeObj,name: string, max_size: int): void =
     self.addEntity(tmp2)
 
 proc hasEntity*(tree: DoublyLinkedNodeObj, entity: string): bool =
-    #searches the tree to see if entity exists within the tree
     if tree.isNil:
         return false
     if tree.data.name == entity:
@@ -186,7 +184,7 @@ proc formatNode(y: DoublyLinkedNodeObj): JsonNode =
         str_prev = y.prev.data.name
         str_next = y.next.data.name
 
-    var tmp = %*{
+    var currentNode = %*{
         "name": x.name,
         "pairs": $x.pairs,
         "size": x.size,
@@ -194,8 +192,7 @@ proc formatNode(y: DoublyLinkedNodeObj): JsonNode =
         "prev": str_prev,
         "next": str_next
     }
-    return tmp
-    # save_string.add(tmp)
+    return currentNode
 
 proc saveTree(self: DoublyLinkedNodeObj): void =
     if self.isNil:
@@ -212,11 +209,4 @@ proc writeOrderedTree(): void =
         echo("Error trying to save to file")
 
 
-#TODO load the tree
-# proc reconstructTree(): DoublyLinkedNodeObj = 
-#problem solving time, what do we know about the saved tree
-#it's saved as an in order tree
-#it has te next and prev nodes saved info
-#idea to make the loading easier create a proc that will find the parent
-#of the given nodes if the node has no parent it must be the root node
-#this will make construction of the tree trivial
+#[TODO: load Tree]#
