@@ -1,12 +1,12 @@
 import asyncdispatch, asyncnet, parser, json, schema, tables
 import parseutils, strutils
 #this will hold the tree when using command line arguments
-var anon* = initTable[string, DoublyLinkedNodeObj]()
+var treeContainer* = initTable[string, DoublyLinkedNodeObj]()
 #the first new entity will be the basis of the root key
 var root_key : string
-#server.nim
+
 type
-    Client = ref object
+    Client* = ref object
         socket: AsyncSocket
         netAddr: string
         id: int
@@ -30,38 +30,38 @@ proc cmdAdd(self: Server,x: JsonNode): void =
     #and there is no root node found inside the dictionary
     #so the first entity created will become the root and the
     #key to access it will be the entities name
-    if anon.len == 0:
+    if treeContainer.len == 0:
         #TODO the static value should be a temporary thing
         var tmp = newEntity(name, int_max_size)
-        anon.add(tmp.data.name, tmp)
+        treeContainer.add(tmp.data.name, tmp)
         root_key = tmp.data.name
     else:
-        var root = anon[root_key]
+        var root = treeContainer[root_key]
         root.newEntity(name, int_max_size)
         asyncCheck self.socket.send("add: OK")
 
 proc cmdDel(self: Server, x: JsonNode): void =
-    if anon.len == 0:
+    if treeContainer.len == 0:
         asyncCheck self.socket.send("Nothing to delete")
         return
     else:
-        if anon[root_key].hasEntity($["args"][0]):
-            var tmp = anon[root_key].delEntity($["args"][0])
-            anon.clear()
-            #the clear is probably not needed, but doesn't hurt to be thorough
-            anon.add(tmp.data.name, tmp)
+        if treeContainer[root_key].hasEntity($["args"][0]):
+            var tmp = treeContainer[root_key].delEntity($["args"][0])
+            treeContainer.clear()
+
+            treeContainer.add(tmp.data.name, tmp)
             root_key = tmp.data.name
             asyncCheck self.socket.send("del: OK")
 
 proc cmdAddPair(self: Server,x: JsonNode): void =
-    var root = anon[root_key]
+    var root = treeContainer[root_key]
     var name = $x["args"][0]
     var key = $x["args"][1]
     var value = $x["args"][2]
     #while caching the values now isn't a noticable difference it does allow two things
     #one it increases code readability
     #two if this code grows the impact of having to reacesses items will be be a bad thing
-    if anon.len == 0:
+    if treeContainer.len == 0:
         asyncCheck self.socket.send("Nothing for Lynx to add")
         return
     elif root.hasEntity(name):
