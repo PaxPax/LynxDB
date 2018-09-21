@@ -114,8 +114,6 @@ proc getEntity*(tree: DoublyLinkedNodeObj, entity: string): DoublyLinkedNodeObj 
     return tree.prev.getEntity(entity)
  
 proc addPair*(target: DoublyLinkedNodeObj, key: string, value: string): void =
-    if target.data.size <= target.data.size:
-        quit("The targeted entity is currently full")
     target.data.pairs[target.data.size].key = key
     target.data.pairs[target.data.size].value = value
     target.data.size += 1
